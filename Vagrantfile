@@ -4,14 +4,17 @@ Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
 
     config.vm.provider "virtualbox" do |v|
-        v.memory = 1024
-        v.cpus = 1
+        v.memory = 4096
+        v.cpus = 4
     end
 
     config.vm.define "debian" do |debian|
         debian.vm.box = IMAGE_NAME
-        debian.vm.network "forwarded_port", guest: 22, host: 2206, host_ip: "127.0.0.1"
+        debian.vm.network "forwarded_port", guest: 22, host: 2226, host_ip: "127.0.0.1"
+        debian.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
         debian.vm.hostname = "debian13"
     end
 
+
+    config.vm.provision "shell", path: "install-zabbix.sh"
 end
